@@ -6,5 +6,5 @@ This repository contains a port of Flowgorithm for MacOS. The application uses W
 To work, you need to install Wine.
 
 ```bash
-brew install wine-stable
+brew install --cask --no-quarantine wine@staging
 ```
