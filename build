@@ -1,20 +1,40 @@
 #!/bin/bash
 
-# Questo script crea un bundle Flowgorithm.app, aggiunge gli assets .exe di flowgorithm scaricati da http://www.flowgorithm.org/download/files/Flowgorithm-exe-only.zip e unzippali nella directory Contents/MacOS/ e aggiunge lo script di avvio "app"
+spinner() {
+    local pid=$1
+    local delay=0.1
+    local spinstr='|/-\'
+    while ps -p $pid > /dev/null; do
+        local temp=${spinstr#?}
+        printf " [%c]  " "$spinstr"
+        local spinstr=$temp${spinstr%"$temp"}
+        sleep $delay
+        printf "\r"
+    done
+    printf "    \r"
+}
+
+echo "Starting build process..."
 
 rm -rf dist
 
 mkdir -p dist/Flowgorithm.app/Contents/MacOS
 mkdir -p dist/Flowgorithm.app/Contents/Resources
 
-# Downloading latest Flowgorithm-exe-only.zip
-curl -L -o dist/Flowgorithm-exe-only.zip http://www.flowgorithm.org/download/files/Flowgorithm-exe-only.zip
-unzip dist/Flowgorithm-exe-only.zip -d dist/Flowgorithm.app/Contents/MacOS
+echo "Downloading Flowgorithm executable... "
+curl -L -s -o dist/Flowgorithm-exe-only.zip http://www.flowgorithm.org/download/files/Flowgorithm-exe-only.zip &
+spinner $!
+
+echo "Extracting files... "
+unzip -q dist/Flowgorithm-exe-only.zip -d dist/Flowgorithm.app/Contents/MacOS &
+spinner $!
+
 rm dist/Flowgorithm-exe-only.zip
 
-cp app dist/Flowgorithm.app/Contents/MacOS/Flowgorithm
+cp scripts/app.sh dist/Flowgorithm.app/Contents/MacOS/Flowgorithm
 chmod +x dist/Flowgorithm.app/Contents/MacOS/Flowgorithm
 
 cp -r assets/ dist/Flowgorithm.app/Contents/Resources/
-
 cp Info.plist dist/Flowgorithm.app/Contents/
+
+echo "Build completed!"
