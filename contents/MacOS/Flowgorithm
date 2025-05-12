@@ -3,6 +3,7 @@
 export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH" 
 
 wine_path=$(which wine)
+winecfg_path=$(which winecfg)
 assets_path="$(dirname "$0")"
 
 if [ -z "$wine_path" ]; then
@@ -11,7 +12,7 @@ if [ -z "$wine_path" ]; then
   exit 1
 fi
 
-# run wine
+# setup and run wine
 $wine_path $assets_path/Flowgorithm.exe
 
 exit 0

@@ -31,10 +31,8 @@ spinner $!
 
 rm dist/Flowgorithm-exe-only.zip
 
-cp scripts/app.sh dist/Flowgorithm.app/Contents/MacOS/Flowgorithm
-chmod +x dist/Flowgorithm.app/Contents/MacOS/Flowgorithm
+cp -r contents/ dist/Flowgorithm.app/Contents/
 
-cp -r assets/ dist/Flowgorithm.app/Contents/Resources/
-cp Info.plist dist/Flowgorithm.app/Contents/
+chmod +x dist/Flowgorithm.app/Contents/MacOS/Flowgorithm
 
 echo "Build completed!"
